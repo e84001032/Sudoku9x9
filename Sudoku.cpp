@@ -19,18 +19,20 @@ void Sudoku::Solve(){
     for(int i = 0 ; i < sudokuSize ; i++){
         if(cell[i] == 0){
 	    zerocount += 1;
-            }	
+        }	
     } 
-    FirstCheck();  
+    FirstCheck();
     while(true){
+	cout << "done" << endl;
 	Solve_strategy1();
 	Solve_strategy2();
 	int newzerocount = 0;
 	for(int i = 0 ; i < sudokuSize ; i++){
 	   if(cell[i] == 0 ) newzerocount += 1;
-	}	
+	}
+	cout << "newzerocount = " << newzerocount << endl;	
 	if(newzerocount == zerocount) break;
-	else zerocount = newzerocount ;
+	else zerocount = newzerocount;
     }
     PrintOut();
 
@@ -44,7 +46,7 @@ void Sudoku::Solve_strategy1(){
 		for(int j = 1 ; j < 10 ; j++){
 	    	    if(possibility[i][j] == 1){
 			cell[i] = j;
-			Check();//CheckAfterFill(i);
+			Check();
 			break;
 		    }	
 		}		
@@ -56,7 +58,7 @@ void Sudoku::FirstCheck(){
     //check all possibilities for every 0 cell
     for(int i = 0 ; i < sudokuSize ; i++){
         if(cell[i] == 0){
-	    for(int j = 1 ; j < 10 ; j++){
+	   for(int j = 1 ; j < 10 ; j++){
 		possibility[i][j] = 1;
             }	
             possibility[i][0] = 9;
@@ -109,8 +111,8 @@ void Sudoku::FirstCheck(){
 void Sudoku::Solve_strategy2(){
     //check row from 1 to 9 if there's only one cell can be filled with the number then fill
     for(int row = 0 ; row < 9 ; row ++){
-	int countpossibility = 0;
 	for(int i = 1 ; i < 10; i ++){
+            int countpossibility = 0;
      	    for(int j = 0 ; j < 9 ; j ++){
 	        if( possibility[row*9+j][i] == 1) countpossibility += 1;
 	    }
@@ -118,7 +120,7 @@ void Sudoku::Solve_strategy2(){
 	        for(int j = 0 ; j < 9 ; j ++){
 		    if( possibility[row*9+j][i] == 1){
 			cell[row*9+j] = i;
-			Check();//	CheckAfterFill(row*9+j);
+			Check();
 			break;
 		    }
 	    	}
@@ -127,8 +129,8 @@ void Sudoku::Solve_strategy2(){
     }
     //check col from 1 to 9 if there's only one cell can be filled with the number then fill
     for(int col = 0 ; col < 9 ; col ++){
-        int countpossibility = 0;
         for(int i = 1 ; i < 10; i ++){
+            int countpossibility = 0;
             for(int j = 0 ; j < 9 ; j ++){
                 if( possibility[col+j*9][i] == 1) countpossibility += 1;
             }
@@ -136,7 +138,7 @@ void Sudoku::Solve_strategy2(){
                 for(int j = 0 ; j < 9 ; j ++){
                     if( possibility[col+9*j][i] == 1){
                         cell[col+9*j] = i;
-			Check();//CheckAfterFill(col+9*j);
+			Check();
 			break;
                     }
                 }
@@ -149,8 +151,8 @@ void Sudoku::Solve_strategy2(){
 	for(int i = 0 ; i < 9 ; i++){
 	    zone[i] += numofzone%3*3 + numofzone/3*27;
 	}
-        int countpossibility = 0;
         for(int i = 1 ; i < 10; i ++){
+            int countpossibility = 0;
             for(int j = 0 ; j < 9 ; j ++){
                 if(possibility[zone[j]][i] == 1) countpossibility += 1;
             }
@@ -158,7 +160,7 @@ void Sudoku::Solve_strategy2(){
                 for(int j = 0 ; j < 9 ; j ++){
                     if(possibility[zone[j]][i] == 1){
                         cell[zone[j]] = i;
-			Check();//CheckAfterFill(zone[j]);
+			Check();
 			break;
                     }
                 }
@@ -202,6 +204,11 @@ void Sudoku::Check(){
                     }
                 }
             }
+	}
+	else{
+	    for(int j = 0 ; j < 10 ; j ++){
+		possibility[i][j] = 0 ;
+	    }
 	}
     }
 }
