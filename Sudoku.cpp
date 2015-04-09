@@ -46,7 +46,7 @@ void Sudoku::Solve_strategy1(){
 		for(int j = 1 ; j < 10 ; j++){
 	    	    if(possibility[i][j] == 1){
 			cell[i] = j;
-			Check();
+			CheckAfterFill(i);
 			break;
 		    }	
 		}		
@@ -120,7 +120,7 @@ void Sudoku::Solve_strategy2(){
 	        for(int j = 0 ; j < 9 ; j ++){
 		    if( possibility[row*9+j][i] == 1){
 			cell[row*9+j] = i;
-			Check();
+			CheckAfterFill(row*9+j);
 			break;
 		    }
 	    	}
@@ -138,7 +138,7 @@ void Sudoku::Solve_strategy2(){
                 for(int j = 0 ; j < 9 ; j ++){
                     if( possibility[col+9*j][i] == 1){
                         cell[col+9*j] = i;
-			Check();
+			CheckAfterFill(col+9*j);
 			break;
                     }
                 }
@@ -160,7 +160,7 @@ void Sudoku::Solve_strategy2(){
                 for(int j = 0 ; j < 9 ; j ++){
                     if(possibility[zone[j]][i] == 1){
                         cell[zone[j]] = i;
-			Check();
+			CheckAfterFill(zone[j]);
 			break;
                     }
                 }
@@ -214,6 +214,7 @@ void Sudoku::Check(){
 }
 
 void Sudoku::CheckAfterFill(int i){    
+    int value = cell[i];
     int row = i/9;
     int col = i%9;
     int zonerow = i/27;
@@ -222,17 +223,20 @@ void Sudoku::CheckAfterFill(int i){
     for(int j = 0 ; j < 9 ; j++){
         zone[j] += zonerow * 27 + zonecol * 3;
     }
+    for(int j = 0 ; j < 10 ; j ++){
+	possibility[i][j] = 0;
+    }
     for(int j = 0 ; j < 9 ; j++){
-	if( possibility[row+j][cell[i]] == 1){ 
-	    possibility[row+j][cell[i]] -= 1;
-	    possibility[row+j][0] -= 1;
+	if( possibility[row*9+j][value] == 1){ 
+	    possibility[row*9+j][value] -= 1;
+	    possibility[row*9+j][0] -= 1;
 	} 
-	if( possibility[col+9*j][cell[i]] == 1){
-            possibility[col+9*j][cell[i]] -= 1;
+	if( possibility[col+9*j][value] == 1){
+            possibility[col+9*j][value] -= 1;
             possibility[col+9*j][0] -= 1;
 	}
-	if( possibility[zone[j]][cell[i]] == 1){
-            possibility[zone[j]][cell[i]] -= 1;
+	if( possibility[zone[j]][value] == 1){
+            possibility[zone[j]][value] -= 1;
             possibility[zone[j]][0] -= 1;
         }
 
