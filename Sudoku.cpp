@@ -15,27 +15,52 @@ void Sudoku::ReadIn(){
 }
 
 void Sudoku::Solve(){
+    
+    if(Process()){
+	PrintOut();
+    }
+    else
+	cout << "no solution" << endl;
+
+}
+
+bool Sudoku::Process(){
+    FirstCheck();
+    while(true){
+	int before = ZeroCount();
+	Solve_strategy1();
+	Solve_strategy2();
+	int after = ZeroCount();
+	if(after == 0) return true;
+	if(after == before) break;
+    }
+    int processing = GetNextZero();
+    for(int i = 1 ; i < 10 ; i ++){
+	if(possibility[processing][i] == 1){
+	    cell[processing] = i;
+	    if(Process()) return true;
+	    cell[processing] = 0;
+	}
+    }
+    return false;
+}
+
+int Sudoku::GetNextZero(){
+    int i;
+    for( i = 0 ; i < sudokuSize ; i ++){
+	if(cell[i] == 0) return i;
+    }
+    return -1;
+}
+
+int Sudoku::ZeroCount(){
     int zerocount = 0 ;
     for(int i = 0 ; i < sudokuSize ; i++){
         if(cell[i] == 0){
 	    zerocount += 1;
         }	
     } 
-    FirstCheck();
-    while(true){
-	cout << "done" << endl;
-	Solve_strategy1();
-	Solve_strategy2();
-	int newzerocount = 0;
-	for(int i = 0 ; i < sudokuSize ; i++){
-	   if(cell[i] == 0 ) newzerocount += 1;
-	}
-	cout << "newzerocount = " << newzerocount << endl;	
-	if(newzerocount == zerocount) break;
-	else zerocount = newzerocount;
-    }
-    PrintOut();
-
+    return zerocount;
 }
 
 void Sudoku::Solve_strategy1(){

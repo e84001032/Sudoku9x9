@@ -13,6 +13,9 @@ class Sudoku
 	void Solve_strategy2();
 	void FirstCheck();
 	void Check();
+	int GetNextZero();
+	int ZeroCount();
+	bool Process();
 	void CheckAfterFill(int i);
 	void PrintOut();
         static const int sudokuSize = 81;
