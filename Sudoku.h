@@ -12,14 +12,14 @@ class Sudoku
         void GiveQuestion();
     protected:
     private:
-        void FirstCheck();
-        void CheckAfterFill(int x,int y);
-        void Solving();
-        void Solve_strategy1();
-        void Solve_strategy2();
+        void FirstCheck(int board[][9]);
+        void CheckAfterFill(int x,int y,int board[][9]);
+        void Solving(int board[][9]);
+        void Solve_strategy1(int board[][9]);
+        void Solve_strategy2(int board[][9]);
         int backtracking(int board[][9]);
         int checkvalid(int board[][9], int x, int y);
-        int ZeroCount();
+        int ZeroCount(int board[][9]);
         int isSolved(int board[][9]);
         int paste(int a[][9], int b[][9]);
         void PrintOut();
