@@ -272,3 +272,103 @@ void Sudoku::PrintOut(){
     }
     
 }
+
+void Sudoku::GiveQuestion(){
+    srand(time(NULL));
+    int a,b,c,d,e,f,g,h,i;
+    int num[9] = {1,2,3,4,5,6,7,8,9}; 
+    for(int j = 0 ; j < 9 ; j ++){
+	int tmp;
+	int ex = rand()%9;
+	tmp = num[j];
+	num[j] = num[ex];
+	num[ex] = tmp;
+    }
+    a = num[0];
+    b = num[1];
+    c = num[2];
+    d = num[3];
+    e = num[4];
+    f = num[5];
+    g = num[6];
+    h = num[7];
+    i = num[8];
+    int question[9][9] =     {{ a, b, c, d, e, f, g, h, i},
+                                { d, e, f, g, h, i, a, b, c},
+                                { g, h, i, a, b, c, d, e, f},
+                                { b, c, a, e, f, d, h, i, g},
+                                { e, f, d, h, i, g, b, c, a},
+                                { h, i, g, b, c, a, e, f, d},
+                                { c, a, b, f, d, e, i, g, h},
+                                { f, d, e, i, g, h, c, a, b},
+                                { i, g, h, c, a, b, f, d, e}};
+    int temp[9][9];
+    int count = 0;
+    int holes = 70;
+    for(int j = 0 ; j < holes ; j++){
+        int x = rand()%9;
+	int y = rand()%9; 
+        if(question[x][y] > 0){ 
+	    paste(temp,question);
+	    temp[x][y] = 0;
+	    Solving(temp);
+	    backtracking(temp);
+	    if(ans>1){ 
+		j--; 
+		ans=0; 
+		if(++count > 100) break;
+	    }
+	    else{ 
+		question[x][y] = 0;
+		count = 0;
+	    }
+	}
+        else j--;
+    }
+    
+    int rand_1;
+    int rand_2;
+    int tmp_ele;
+    for(int i = 0 ; i < 100 ; i++){
+	rand_1 = rand()%9;
+	rand_2 = rand_1/3*3+rand()%3;
+	for(int j = 0 ; j < 9 ; j++){ // 兩行互換(同一區塊內ex 012 345 678 ...)
+	    tmp_ele = question[rand_1][j];
+	    question[rand_1][j] = question[rand_2][j];
+	    question[rand_2][j] = tmp_ele;
+	}
+	rand_1 = rand()%9;
+        rand_2 = rand_1/3*3+rand()%3;
+	for(int j = 0 ; j < 9 ; j++){ // 兩欄互換(同一區塊內)
+	    tmp_ele = question[j][rand_1];
+	    question[j][rand_1] = question[j][rand_2];
+	    question[j][rand_2] = tmp_ele;
+	}
+	rand_1 = rand()%9/3*3;
+	rand_2 = rand()%9/3*3;
+	for(int j = 0 ; j < 3 ; j++){
+	    for(int k = 0 ; k < 9 ; k++){
+		tmp_ele = question[rand_1+j][k];
+		question[rand_1+j][k] = question[rand_2+j][k];
+		question[rand_2+j][k] = tmp_ele; 
+	    }
+	}
+	rand_1 = rand()%9/3*3;
+        rand_2 = rand()%9/3*3;
+	for(int j = 0 ; j < 3 ; j++){
+	    for(int k = 0 ; k < 9 ; k++){
+		tmp_ele = question[k][rand_1+j];
+		question[k][rand_1+j] = question[k][rand_2+j];
+		question[k][rand_2+j] = tmp_ele;
+	    }
+	}
+    }
+	    
+    for(int x = 0 ; x < 9 ; x ++){
+        for(int y = 0 ; y < 9 ; y ++){
+            cout << setw(3) << question[x][y];
+	}
+	cout << endl;
+    }
+}
+
